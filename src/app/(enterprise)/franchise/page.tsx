@@ -1,0 +1,4 @@
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+export const dynamic = "force-dynamic";
+export default async function FranchisePage() { const role = (await cookies()).get('session_role')?.value; if (!role || !['CORPORATE_ADMIN','FRANCHISEE'].includes(role)) redirect('/cms/login'); return <main className="mx-auto min-h-screen max-w-6xl px-6 py-20"><p className="text-xs uppercase tracking-[0.3em] text-primary">Franchise intelligence</p><h1 className="mt-3 font-serif text-6xl">Your territory, at a glance.</h1><div className="mt-12 grid gap-5 md:grid-cols-3">{[['Locations','—'],['Gross revenue','—'],['Royalty health','On track']].map(([label,value]) => <div key={label} className="rounded-xl border border-border bg-card p-6"><p className="text-sm text-muted-foreground">{label}</p><p className="mt-4 font-serif text-4xl">{value}</p></div>)}</div></main>; }

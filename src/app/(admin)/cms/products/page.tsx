@@ -1,0 +1,2 @@
+export const dynamic = "force-dynamic";
+export default function ProductsPage() { return <main className="mx-auto max-w-6xl"><p className="text-xs uppercase tracking-[0.25em] text-primary">Enterprise catalog</p><h1 className="mt-2 font-serif text-4xl">Global products</h1><div className="mt-8 rounded-xl border border-border bg-card p-8 text-sm text-muted-foreground">Product management is restricted to Corporate Admins. Connect the native D1 binding to load and edit the global catalog.</div></main>; }

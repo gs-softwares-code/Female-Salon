@@ -1,0 +1,5 @@
+import Link from "next/link";
+import { unstable_cache } from "next/cache";
+export const metadata = { title: "Our brands | Aegis Beauty" };
+const getBrands = unstable_cache(async () => [['atelier','Luxury salons','Considered color, cut, and care.'],['rush','Express studios','Beautifully efficient, always precise.'],['aesthetics','Medical wellness','Clinically led, human at heart.']] as const, ['brand-catalog'], { revalidate: 300, tags: ['brands'] });
+export default async function BrandsPage() { const brands = await getBrands(); return <main className="mx-auto min-h-screen max-w-6xl px-6 py-20"><p className="text-xs uppercase tracking-[0.3em] text-primary">The house</p><h1 className="mt-3 font-serif text-6xl">Different rituals. One standard.</h1><div className="mt-12 grid gap-5 md:grid-cols-3">{brands.map(([slug,name,copy]) => <Link key={slug} href={`/brands/${slug}`} className="rounded-2xl border border-border bg-card p-7 hover:border-primary"><h2 className="font-serif text-3xl">{name}</h2><p className="mt-3 text-sm text-muted-foreground">{copy}</p><span className="mt-8 inline-block text-sm text-primary">Explore brand →</span></Link>)}</div></main>; }

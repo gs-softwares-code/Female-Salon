@@ -1,0 +1,2 @@
+export const metadata = { title: "Investors | Aegis Beauty" };
+export default function InvestorsPage() { return <main className="mx-auto min-h-screen max-w-6xl px-6 py-20"><p className="text-xs uppercase tracking-[0.3em] text-primary">Authority & governance</p><h1 className="mt-3 font-serif text-6xl">Built for enduring growth.</h1><p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">Aegis Beauty combines disciplined operations, distinctive brands, and a long-term view of the global beauty and wellness market.</p></main>; }

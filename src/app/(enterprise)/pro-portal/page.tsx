@@ -1,0 +1,4 @@
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+export const dynamic = "force-dynamic";
+export default async function ProPortalPage() { const role = (await cookies()).get('session_role')?.value; if (!role || !['CORPORATE_ADMIN','FRANCHISEE','SALON_MANAGER','STYLIST'].includes(role)) redirect('/cms/login'); return <main className="mx-auto min-h-screen max-w-6xl px-6 py-20"><p className="text-xs uppercase tracking-[0.3em] text-primary">Pro portal</p><h1 className="mt-3 font-serif text-6xl">Tools for the people behind the ritual.</h1><div className="mt-12 grid gap-5 md:grid-cols-3">{['Product distribution','Education library','Order history'].map((item) => <div key={item} className="rounded-xl border border-border bg-card p-6"><h2 className="font-serif text-2xl">{item}</h2><p className="mt-3 text-sm text-muted-foreground">Your role-based workspace is ready for catalog and education data.</p></div>)}</div></main>; }

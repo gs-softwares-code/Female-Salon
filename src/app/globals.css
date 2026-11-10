@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #FAF7F2; /* Cream/Ivory */
+    --foreground: #221B19; /* Deep Espresso */
+    --card: #FFFFFF;
+    --card-foreground: #221B19;
+    --primary: #9C6644; /* Warm Terra Champagne */
+    --primary-foreground: #FFFBF7;
+    --secondary: #EFE8E1; /* Nude Beige */
+    --secondary-foreground: #3D2D2A;
+    --muted: #F5EFEB; /* Soft Blush Tint */
+    --muted-foreground: #7C6E68;
+    --accent: #C79A7F; /* Luminous Champagne Gold */
+    --accent-foreground: #2A1D1A;
+    --border: #E8DDD5;
+    --input: #E8DDD5;
+    --ring: #9C6644;
+    --destructive: #A34848;
+    --destructive-foreground: #FFFBF7;
+    --radius: 1rem;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-serif: "Playfair Display", Georgia, Cambria, "Times New Roman", serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-serif {
+  font-family: var(--font-serif);
+}
+
+/* Luxury animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes shimmerGlow {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmerGlow 4s ease-in-out infinite;
+}
+
+/* Glassmorphism card helpers */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(232, 221, 213, 0.8);
+}
+
+.glass-card-dark {
+  background: rgba(34, 27, 25, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(199, 154, 127, 0.25);
+}
+
+/* Custom smooth luxury transitions and scrollbar */
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: #E2CFBF;
+  color: #221B19;
+}

@@ -1,0 +1,2 @@
+"use client";
+export default function ErrorBoundary({ reset }: { error: Error & { digest?: string }; reset: () => void }) { return <main className="flex min-h-screen items-center justify-center bg-background px-6"><div className="max-w-md text-center"><p className="text-xs uppercase tracking-[0.3em] text-primary">A temporary pause</p><h1 className="mt-3 font-serif text-4xl">We couldn’t load that experience.</h1><button onClick={() => reset()} className="mt-7 rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground">Try again</button></div></main>; }
