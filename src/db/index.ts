@@ -3,6 +3,7 @@ import * as schema from "./schema";
 import { DatabaseSync } from "node:sqlite";
 import path from "node:path";
 import fs from "node:fs";
+import os from "node:os";
 
 export type D1DatabaseBinding = Parameters<typeof drizzle>[0];
 export type BeautyDatabase = ReturnType<typeof drizzle<typeof schema>>;
@@ -12,12 +13,42 @@ declare global {
   var __LOCAL_SQLITE_INSTANCE__: DatabaseSync | undefined;
 }
 
+function getDatabasePath(): string {
+  // In serverless environments (e.g. AWS Lambda / Vercel), current working directory is read-only.
+  // Copying the bundled salon.sqlite to os.tmpdir() provides read/write access.
+  const bundledPath = path.resolve(process.cwd(), "salon.sqlite");
+  
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    const tmpDbPath = path.join(os.tmpdir(), "salon.sqlite");
+    if (!fs.existsSync(tmpDbPath) && fs.existsSync(bundledPath)) {
+      try {
+        fs.copyFileSync(bundledPath, tmpDbPath);
+      } catch (e) {
+        console.warn("Could not copy sqlite to tmpdir, using bundledPath fallback:", e);
+        return bundledPath;
+      }
+    }
+    return fs.existsSync(tmpDbPath) ? tmpDbPath : bundledPath;
+  }
+
+  return bundledPath;
+}
+
 function createLocalD1Shim(): D1DatabaseBinding {
   if (!globalThis.__LOCAL_SQLITE_INSTANCE__) {
-    const dbPath = path.resolve(process.cwd(), "salon.sqlite");
-    const rawDb = new DatabaseSync(dbPath);
-    // enable WAL mode for high concurrency
-    rawDb.exec("PRAGMA journal_mode = WAL;");
+    const dbPath = getDatabasePath();
+    let rawDb: DatabaseSync;
+    try {
+      rawDb = new DatabaseSync(dbPath);
+      try {
+        rawDb.exec("PRAGMA journal_mode = WAL;");
+      } catch {
+        // WAL pragma might be restricted in some read-only sandboxes
+      }
+    } catch {
+      // Fallback to read-only mode if read-write fails
+      rawDb = new DatabaseSync(dbPath, { readOnly: true });
+    }
     globalThis.__LOCAL_SQLITE_INSTANCE__ = rawDb;
   }
   const rawDb = globalThis.__LOCAL_SQLITE_INSTANCE__;
@@ -26,7 +57,6 @@ function createLocalD1Shim(): D1DatabaseBinding {
     prepare(query: string) {
       return {
         bind(...params: any[]) {
-          // Normalize parameters (e.g. boolean to 0/1, Date to number/string if needed)
           const normalized = params.map(p => {
             if (p instanceof Date) return p.getTime();
             if (typeof p === "boolean") return p ? 1 : 0;
